@@ -1,6 +1,6 @@
 document.getElementById('addbook').addEventListener('submit',addBook)
 
-const books = document.querySelector('#display ul')
+const books = document.querySelector('#display')
 const returned = document.querySelector('#returned ul')
 
 
@@ -42,20 +42,36 @@ try{
 
 
 function display(data){
-const li = document.createElement('li')
-const time = new Date(data.createdAt)
-time.setHours(time.getHours() + 5)
-time.setMinutes(time.getMinutes() + 30)
+const li = document.createElement('div')
+li.classList.add("items")
+const date1 = new Date(data.updatedAt);
+
+const formattedDate = date1.toLocaleDateString();
+
+const formattedTime = date1.toLocaleTimeString(undefined, {
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  hour12: true,
+});
 
 const p = document.createElement('p')
 p.textContent = `Book Name : ${data.bookName}`
 const p2 = document.createElement('p')
-p2.textContent = `Book taken on  : ${time.toLocaleString()}`
-time.setHours(time.getHours() + 1)
+p2.textContent = `Book taken on  :  ${formattedDate} , ${formattedTime}`
+date1.setHours(date1.getHours() + 1)
+const formattedTime1 = date1.toLocaleTimeString(undefined, {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+  });
+  
 const p3 = document.createElement('p')
-p3.textContent = `Book return date : ${time.toLocaleString()}`
+p3.textContent = `Book return date :  ${date1.toLocaleDateString()} , ${formattedTime1}`
 const p4 = document.createElement('p')
-const fine = Math.floor((new Date() - new Date(data.createdAt)) / (1000  * 60 *60))
+const hours = Math.floor((new Date() - new Date(data.createdAt)) / (1000  * 60 *60))
+const fine = hours *10;
 
 p4.textContent = `current fine : ${fine}`
 li.appendChild(p)
@@ -64,15 +80,29 @@ li.appendChild(p3)
 li.appendChild(p4)
 
 const returnBook = document.createElement('button')
-returnBook.textContent = "return book"
+returnBook.textContent = "Return book"
 li.appendChild(returnBook)
 returnBook.onclick = ()=>{
     li.innerHTML = ``
     const input = document.createElement('input')
-    const fine = Math.floor((new Date() - new Date(data.createdAt)) / (1000  * 60 *60))
+    const hours = Math.floor((new Date() - new Date(data.createdAt)) / (1000  * 60 *60))
+    if(hours == 0){
+        axiosInstance.post('/return' ,{id : data.id , value : 0})
+        .then((data)=>{
+            console.log(data)
+            books.removeChild(li)
+            returnedBooksDisplay(data.data.book)
+        }).catch(e => console.log(e))
+    }else{
+
+    
+    const fine = hours * 10
     input.value = fine
     input.readOnly = true
+    input.disabled =  true;
+    input.className = "show-fine"
     const button = document.createElement('button')
+    button.classList.add("pay-fine")
     button.textContent = "pay"
     li.appendChild(input)
     li.appendChild(button)
@@ -84,6 +114,7 @@ returnBook.onclick = ()=>{
             returnedBooksDisplay(data.data.book)
         }).catch(e => console.log(e))
     }
+}
     }
 
 books.appendChild(li)
@@ -92,13 +123,26 @@ books.appendChild(li)
 
 function returnedBooksDisplay(data){
     const li = document.createElement('li')
-
+    console.log(data)
     const p = document.createElement('p')
     p.textContent = `Book Name : ${data.bookName}`
     const p1 = document.createElement('p')
-p1.textContent = `fine : ${data.fine}`
+    p1.textContent = `fine : ${data.fine}`
+    const p2 = document.createElement('p')
+    const date1 = new Date(data.updatedAt);
+
+const formattedDate = date1.toLocaleDateString();
+
+const formattedTime = date1.toLocaleTimeString(undefined, {
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  hour12: true,
+});
+p2.textContent = `returned on : ${formattedDate} , ${formattedTime}`
 li.appendChild(p)
 li.appendChild(p1)
+li.appendChild(p2)
 
     returned.appendChild(li)
 }

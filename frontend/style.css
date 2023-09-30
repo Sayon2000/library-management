@@ -1,0 +1,74 @@
+
+body{
+    background-color: cadetblue;
+}
+
+
+#addbook input{
+    
+
+    padding: 8px;
+    width: 25%;
+    font-size: medium;
+    border-radius: 8px;
+}
+
+#addbook button{
+    padding: 9px;
+    border-radius: 7px;
+    width: 6rem;
+
+}
+#display{
+    flex-wrap: wrap;
+    margin : 10px 0px 10px 10px;
+    display: flex;
+    gap : 1rem;
+    justify-content: flex-start;
+}
+.items{
+    border: 10px solid burlywood;
+    min-width: 24%;
+    padding: 15px;
+    background-color: bisque;
+    box-sizing: border-box;
+    border-radius: 1rem;
+}
+
+button{
+    background-color: chartreuse;
+    cursor: pointer;
+}
+.items button{
+    border-radius: 7px;
+
+    padding: 7px;
+    font-size: medium;
+}
+
+div > input{
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.pay-fine{
+    padding: 5px !important;
+    width: 50px;
+    margin: 4px;
+}
+
+.show-fine{
+    background-color: white;
+    cursor: not-allowed;
+}
+
+li{
+    list-style-type: none;
+    margin: 4rem 0;
+}
+
+#returned{
+    background: #397878;
+    color: white;
+    padding: 1rem 0;
+}

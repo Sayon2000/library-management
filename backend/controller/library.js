@@ -29,16 +29,17 @@ exports.returnBook = async(req,res)=>{
         const value = req.body.value;
         const id = req.body.id;
         const book = await library.findByPk(id);
-        const startTime = book.createdAt;
+        const startTime = new Date(book.createdAt);
         const curr = new Date();
-        const hours = (curr - startTime) /(1000 * 60 * 60);
+        const hours = Math.floor((curr - startTime) /(1000 * 60 * 60));
         console.log(hours)
         if(hours < 1){
             book.returned = true;
             await book.save()
             return res.json({success : true , book})
         }else{
-            const fine = Math.floor(hours*10);
+            const fine = hours*10;
+            console.log(fine)
             if(fine == value){
                 book.returned = true;
                 book.fine = fine;
